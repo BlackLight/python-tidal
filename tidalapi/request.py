@@ -73,7 +73,7 @@ class Requests(object):
 
             if (
                 json_resp and
-                json_resp['userMessage'].startswith("The token has expired.")
+                json_resp.get('userMessage', '').startswith("The token has expired.")
                 and refresh_token
             ):
                 log.debug("The access token has expired, trying to refresh it.")
