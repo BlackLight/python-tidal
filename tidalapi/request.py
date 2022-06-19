@@ -65,11 +65,7 @@ class Requests(object):
             try:
                 json_resp = request.json()
             except json.JSONDecodeError:
-                log.warning(
-                    'Got invalid JSON from the API. HTTP status: %d',
-                    request.status_code
-                )
-                log.debug('Invalid JSON response\n%s', request.text)
+                pass
 
             if (
                 json_resp and
@@ -80,6 +76,9 @@ class Requests(object):
                 refreshed = self.session.token_refresh(refresh_token)
                 if refreshed:
                     request = self.basic_request(method, url, params, data, headers)
+            else:
+                log.warning('HTTP error on %s %s: %d', request.status_code)
+                log.debug('Response text\n%s', request.text)
 
         return request
 
